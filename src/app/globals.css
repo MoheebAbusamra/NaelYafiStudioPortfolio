@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/*
+  Nael Yafi Studio design tokens.
+
+  The palette is a dark, classy architectural scheme: deep navy grounds, off white
+  typography, and gold used sparingly for accents, badges, and filigree.
+
+  Naming note: the token names below are semantic (surface / ink / accent) rather
+  than literal colour names, so a future palette change does not leave the codebase
+  full of variables called "cream" that render as navy.
+*/
+@theme {
+  /* Surfaces, darkest to lightest. */
+  --color-navy: #002b49;
+  --color-navy-deep: #001d31;
+  --color-navy-soft: #0a3a5c;
+  --color-charcoal: #323133;
+  --color-charcoal-soft: #3d3c3f;
+
+  /* Typography and contrast overlays. */
+  --color-ivory: #f3f3f9;
+  --color-ivory-dim: #c9cdd8;
+
+  /* Accents. */
+  --color-gold: #ebc71d;
+  --color-gold-soft: #f2da6b;
+  --color-gold-deep: #b99a12;
+
+  --font-display: var(--font-cinzel), ui-serif, Georgia, serif;
+  --font-sans: var(--font-josefin), ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacious scale, matching the low density dial for an editorial marketing page. */
+  --spacing-section: clamp(6rem, 14vh, 11rem);
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --background: var(--color-navy);
+  --foreground: var(--color-ivory);
+  /* Set from JS so mobile browser chrome does not clip 100vh sections. */
+  --vh: 1vh;
+}
+
+@layer base {
+  html {
+    /* Lenis drives scrolling; native smooth behavior would fight it. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--color-navy);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    /* The brief forbids hyphens in copy, including automatic hyphenation. */
+    hyphens: none;
+    -webkit-hyphens: none;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Lenis needs the html element to stay scrollable while it interpolates. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-navy-deep);
+  }
+
+  /* Never remove focus affordances; only scope them to keyboard users. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  /* Viewport height that accounts for mobile browser chrome. */
+  .min-h-dvh-safe {
+    min-height: 100vh;
+    min-height: calc(var(--vh) * 100);
+    min-height: 100dvh;
+  }
+
+  .text-balance-tight {
+    text-wrap: balance;
+  }
+
+  /*
+    Cards use a wrapper with perspective so children can tilt in 3D without
+    each one establishing its own perspective origin.
+  */
+  .perspective-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Hides the native scrollbar on the carousel track without disabling scrolling. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+  Reduced motion: strip transforms and long transitions, but keep opacity so
+  scroll reveals still resolve to a readable state rather than staying hidden.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
