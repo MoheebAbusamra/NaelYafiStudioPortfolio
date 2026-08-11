@@ -305,26 +305,50 @@ export function Carousel({
         </div>
       </div>
 
+      {/*
+        Flank controls, vertically centred on the reel's outer edges.
+
+        The buttons sit above the track, so the wrapper is pointer-events-none and
+        each button opts back in. Without that, the invisible column either side of
+        the reel would swallow drags that start near the edge.
+      */}
       {canScroll && (
-        <div className="mt-8 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => step(-1)}
-            className="flex size-11 cursor-pointer items-center justify-center rounded-full border border-ivory/25 text-ivory transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
-            aria-label="Previous projects"
-          >
-            <ChevronLeft className="size-5" strokeWidth={1.5} />
-          </button>
-          <button
-            type="button"
-            onClick={() => step(1)}
-            className="flex size-11 cursor-pointer items-center justify-center rounded-full border border-ivory/25 text-ivory transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
-            aria-label="Next projects"
-          >
-            <ChevronRight className="size-5" strokeWidth={1.5} />
-          </button>
-        </div>
+        <>
+          <FlankButton side="left" onClick={() => step(-1)} />
+          <FlankButton side="right" onClick={() => step(1)} />
+        </>
       )}
+    </div>
+  );
+}
+
+/**
+ * Circular control pinned to one flank of the reel.
+ *
+ * Sits just inside the viewport edge with a navy scrim behind it, so it stays
+ * legible over whatever photograph happens to be underneath.
+ */
+function FlankButton({ side, onClick }: { side: "left" | "right"; onClick: () => void }) {
+  const isLeft = side === "left";
+
+  return (
+    <div
+      className={`pointer-events-none absolute inset-y-0 z-20 flex items-center ${
+        isLeft ? "left-0 pl-1 sm:pl-3" : "right-0 pr-1 sm:pr-3"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={onClick}
+        className="pointer-events-auto flex size-11 cursor-pointer items-center justify-center rounded-full border border-ivory/25 bg-navy-deep/55 text-ivory backdrop-blur-sm transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep sm:size-12"
+        aria-label={isLeft ? "Previous projects" : "Next projects"}
+      >
+        {isLeft ? (
+          <ChevronLeft className="size-5" strokeWidth={1.5} />
+        ) : (
+          <ChevronRight className="size-5" strokeWidth={1.5} />
+        )}
+      </button>
     </div>
   );
 }

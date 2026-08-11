@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 
 import { Carousel } from "@/components/Carousel";
 import { ProjectCard } from "@/components/ProjectCard";
-import { Lightbox, type LightboxItem } from "@/components/Lightbox";
+import { FramesModal, ProjectShowcase } from "@/components/ProjectShowcase";
+import { Lightbox } from "@/components/Lightbox";
 import { FEATURED_PROJECT, FILTERS, SECONDARY_PROJECTS, type FilterId } from "@/lib/projects";
 import { AWARD } from "@/lib/site";
 
@@ -35,34 +36,8 @@ export function ScatteredGrid() {
     [visibleProjects],
   );
 
-  const featuredItems: LightboxItem[] = useMemo(() => {
-    // Bound to a local first: TypeScript will not carry a narrowing on an imported
-    // binding into the nested map callback.
-    const featured = FEATURED_PROJECT;
-    if (!featured) return [];
-
-    return featured.images.map((image) => ({
-      image,
-      title: featured.title,
-      meta: [featured.meta.discipline, featured.meta.location].filter(Boolean).join("  |  "),
-    }));
-  }, []);
-
-  // The viewer paginates within whichever set was opened, so the featured project
-  // and the carousel stay separate sequences.
-  const [activeSet, setActiveSet] = useState<"featured" | "grid">("grid");
-  const lightboxItems = activeSet === "featured" ? featuredItems : cards;
-
-  const openGrid = (index: number) => {
-    setActiveSet("grid");
-    setLightboxIndex(index);
-  };
-
-  const openFeatured = (index: number) => {
-    setActiveSet("featured");
-    setLightboxIndex(index);
-  };
-
+  // The featured project now owns its own viewer through `FramesModal`, so this
+  // component's lightbox only ever paginates the carousel set.
   return (
     <section id="work" className="relative bg-navy py-(--spacing-section)">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
@@ -73,7 +48,7 @@ export function ScatteredGrid() {
         />
 
         {FEATURED_PROJECT ? (
-          <FeaturedProject onOpen={openFeatured} />
+          <FeaturedProject />
         ) : (
           <PlaceholderPanel label="Featured project imagery is not available yet" />
         )}
@@ -131,7 +106,7 @@ export function ScatteredGrid() {
                   aspect={4 / 5}
                   reveal={false}
                   sizes="(max-width: 640px) 78vw, (max-width: 1024px) 46vw, 25vw"
-                  onOpen={() => openGrid(index)}
+                  onOpen={() => setLightboxIndex(index)}
                 />
               ))}
             </Carousel>
@@ -140,7 +115,7 @@ export function ScatteredGrid() {
       </div>
 
       <Lightbox
-        items={lightboxItems}
+        items={cards}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={setLightboxIndex}
@@ -149,14 +124,15 @@ export function ScatteredGrid() {
   );
 }
 
-function FeaturedProject({ onOpen }: { onOpen: (index: number) => void }) {
+function FeaturedProject() {
   const project = FEATURED_PROJECT;
+  const [framesOpen, setFramesOpen] = useState(false);
+
   if (!project) return null;
 
-  const [hero, ...rest] = project.images;
-  // A hero plate plus four supporting frames keeps the award project dominant
-  // without turning the section into a contact sheet.
-  const support = rest.slice(0, 4);
+  const meta = [project.meta.discipline, project.meta.location, project.meta.year]
+    .filter(Boolean)
+    .join("  |  ");
 
   return (
     <div className="mt-16 sm:mt-20">
@@ -175,9 +151,7 @@ function FeaturedProject({ onOpen }: { onOpen: (index: number) => void }) {
           <h3 className="mt-5 font-display text-[clamp(1.9rem,5vw,3.5rem)] leading-tight text-ivory">
             {project.title}
           </h3>
-          <p className="mt-2 text-[0.65rem] tracking-[0.22em] text-gold/80 uppercase">
-            {project.meta.discipline} &nbsp;|&nbsp; {project.meta.location} &nbsp;|&nbsp; {project.meta.year}
-          </p>
+          <p className="mt-2 text-[0.65rem] tracking-[0.22em] text-gold/80 uppercase">{meta}</p>
         </div>
 
         {project.meta.narrative && (
@@ -199,62 +173,20 @@ function FeaturedProject({ onOpen }: { onOpen: (index: number) => void }) {
         )}
       </motion.div>
 
-      {/*
-        Featured plate.
+      <ProjectShowcase
+        images={project.images}
+        title={project.title}
+        meta={meta}
+        onViewAll={() => setFramesOpen(true)}
+      />
 
-        The cover frame is portrait (roughly 2:3), so at full container width it
-        rendered about 2200px tall. Two things bring it back in line, and both are
-        layout, not download hints: an explicit width cap, and a 4:5 crop so the
-        frame stops being a tower. `sizes` is only a fetch hint and never affected
-        the rendered box, which is why changing it alone did nothing.
-
-        Centred with `mx-auto` so the plate sits on the section's optical axis
-        rather than hanging off the left rule, and still lands near 720px wide
-        against roughly 355px support tiles below, keeping it clearly dominant.
-      */}
-      {hero && (
-        <ProjectCard
-          image={hero}
-          title={project.title}
-          meta={`${project.meta.location}  |  ${project.meta.year}`}
-          index={0}
-          priority
-          aspect={4 / 5}
-          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 72vw, 720px"
-          className="mx-auto mb-5 w-full max-w-[480px] sm:mb-6 sm:max-w-[600px] lg:max-w-[720px]"
-          onOpen={() => onOpen(0)}
-        />
-      )}
-
-      {support.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {support.map((image, i) => (
-            <ProjectCard
-              key={image.id}
-              image={image}
-              title={project.title}
-              meta={project.meta.discipline}
-              index={i + 1}
-              // Uniform ratio so the row of four shares one baseline; the source
-              // frames mix 2:3 and 3:4 and would otherwise sit ragged.
-              aspect={4 / 5}
-              sizes="(max-width: 640px) 46vw, 23vw"
-              onOpen={() => onOpen(i + 1)}
-            />
-          ))}
-        </div>
-      )}
-
-      {project.images.length > support.length + 1 && (
-        <button
-          type="button"
-          onClick={() => onOpen(0)}
-          className="mt-6 inline-flex min-h-[44px] cursor-pointer items-center gap-2 text-[0.65rem] tracking-[0.2em] text-ivory/70 uppercase transition-colors hover:text-gold"
-        >
-          View all {project.images.length} frames
-          <span aria-hidden="true">&rarr;</span>
-        </button>
-      )}
+      <FramesModal
+        open={framesOpen}
+        onClose={() => setFramesOpen(false)}
+        title={project.title}
+        subtitle={meta}
+        images={project.images}
+      />
     </div>
   );
 }
@@ -279,7 +211,7 @@ export function SectionHeading({
       <p className="text-[0.62rem] font-medium tracking-[0.3em] text-gold uppercase sm:text-[0.68rem]">
         {eyebrow}
       </p>
-      <h2 className="mt-4 font-display text-[clamp(2rem,6vw,4.25rem)] leading-[1.05] text-ivory">
+      <h2 className="mt-4 font-display text-[clamp(2rem,6vw,4.25rem)] leading-[1.05] text-ivory whitespace-nowrap">
         {title}
       </h2>
       {copy && <p className="mt-5 text-base leading-relaxed text-ivory/65 sm:text-lg">{copy}</p>}

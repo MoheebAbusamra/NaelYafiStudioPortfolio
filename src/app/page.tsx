@@ -25,12 +25,14 @@ export default function Page() {
       <Header onContact={openContact} />
 
       <main>
-        <Hero onContact={openContact} />
+        {/* The hero no longer takes `onContact`: its CTA pair was removed, so the
+            contact action now lives in the header and footer only. */}
+        <Hero />
         <ScatteredGrid />
         <AboutServices />
       </main>
 
-      <Footer onContact={openContact} />
+      <Footer />
 
       <ContactCardModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </>

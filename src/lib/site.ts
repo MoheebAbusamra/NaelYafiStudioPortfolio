@@ -8,7 +8,7 @@
 export const SITE = {
   name: "Nael Yafi Studio",
   shortName: "NY Studio",
-  tagline: "Designing Spaces That Speak",
+  tagline: "Designing Spaces that speak",
   description:
     "Nael Yafi Studio is an award winning interior design practice creating residential and commercial spaces with warmth, restraint, and precision.",
   url: "https://naelyafistudio.ca",
@@ -43,19 +43,45 @@ export const SISTER_STUDIO = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Work", href: "#work" },
+  { label: "View our work", href: "#work" },
   { label: "About & Services", href: "#about" },
 ] as const;
 
-export const ABOUT_PARAGRAPHS = [
-  "Nael Yafi Studio is an architectural and interior design practice built on a simple belief: a room should feel considered before it is ever described. We work in warm materials, generous light, and proportions that hold up over decades rather than seasons.",
-  "Every project begins with the way a space will actually be lived in. We study circulation, sightlines, and daylight first, then let material and detail follow. The result is architecture that reads as calm because the difficult decisions were made early.",
-  "Our craft is collaborative. We work alongside builders, millworkers, and fabricators from the first sketch, so what is drawn is what gets built. That discipline is what the 2026 Canadian Choice Award recognizes.",
+/**
+ * Studio narrative.
+ *
+ * `heading` entries render as a subheading rather than body copy, which is how the
+ * Creative Director bio is separated from the practice introduction.
+ */
+export const ABOUT_BLOCKS = [
+  {
+    type: "lead",
+    text: "Nael Yafi Studio is an interior design practice focused on thoughtful design, natural materials, and practical expertise. We create calm, timeless spaces that reflect the way people live, with a strong focus on both design and execution.",
+  },
+  {
+    type: "body",
+    text: "From the early stages of each project, we work closely with builders, trades, millworkers, and fabricators. This close collaboration allows us to develop designs that are carefully considered, practical, and achievable, while maintaining the original vision throughout the construction process.",
+  },
+  { type: "heading", text: "Nael Yafi, Creative Director" },
+  {
+    type: "body",
+    text: "Nael Yafi is the founder and Creative Director of Nael Yafi Studio. He holds a Bachelor\u2019s degree in Interior Design and has more than 12 years of professional experience working across nine countries, including seven years in the North American market. His international experience brings a broad perspective to each project and informs his approach to design.",
+  },
+  {
+    type: "body",
+    text: "In addition to his design background, Nael holds a Construction Project Management Certificate and has 20 years of experience in the construction industry. His hands on experience has given him a strong understanding of building materials, construction methods, site coordination, scheduling, and project budgets.",
+  },
+  {
+    type: "body",
+    text: "This combination of interior design and construction experience allows Nael to approach each project with a clear understanding of both the creative and practical aspects of the work, from the initial concept through to completion.",
+  },
 ] as const;
+
+export type AboutBlock = (typeof ABOUT_BLOCKS)[number];
 
 export const SERVICES = [
   {
-    title: "Interior Architecture",
+    title: "Interior Design",
     summary: "Spatial planning, millwork, and material direction for full interiors.",
     detail:
       "We reshape how a space works before we style it: wall planning, ceiling treatments, custom millwork, lighting layouts, and complete material palettes documented to build standard.",
@@ -74,9 +100,9 @@ export const SERVICES = [
   },
   {
     title: "Exterior & Landscape",
-    summary: "Facades, entry sequences, and landscape design as one gesture.",
+    summary: "Connecting the interior with everything around it.",
     detail:
-      "The approach to a building matters as much as the interior. We design facades, entry courts, pool terraces, and planting schemes so the exterior and interior read as a single idea.",
+      "We connect the interior with the exterior, sharing our design vision and collaborating with architects and landscape specialists to create a cohesive, seamless experience from inside out",
   },
   {
     title: "Concept Development",

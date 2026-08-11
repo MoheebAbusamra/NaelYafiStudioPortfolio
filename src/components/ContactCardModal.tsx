@@ -162,8 +162,16 @@ export function ContactCardModal({ open, onClose }: { open: boolean; onClose: ()
                 className="transition-transform duration-300 ease-out will-change-transform"
                 style={{ transformStyle: "preserve-3d" }}
               >
+                {/*
+                  A real business card is roughly 1.66:1, but at 375px that leaves
+                  about 207px of height while the reverse needs roughly 232px for the
+                  logo row, the email control, and a row of 44px social targets. The
+                  card therefore relaxes its ratio on phones and carries a floor via
+                  `min-h`, so the back can never crush its own content. The desktop
+                  card keeps the true card proportion.
+                */}
                 <div
-                  className="preserve-3d relative aspect-[1.66/1] w-full transition-transform duration-[750ms] ease-[var(--ease-luxe)]"
+                  className="preserve-3d relative aspect-[1.42/1] min-h-[272px] w-full transition-transform duration-[750ms] ease-[var(--ease-luxe)] sm:aspect-[1.66/1] sm:min-h-0"
                   style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
                 >
                   <CardFront onFlip={() => setFlipped(true)} active={!flipped} />
@@ -242,7 +250,7 @@ function CardBack({
 }) {
   return (
     <div
-      className="backface-hidden absolute inset-0 flex flex-col justify-between rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-6 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:p-7"
+      className="backface-hidden absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-5 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7"
       style={{ transform: "rotateY(180deg)" }}
       // The back is behind the front until flipped; hide it from AT and tab order.
       aria-hidden={!active}

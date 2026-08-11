@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Josefin_Sans } from "next/font/google";
 
+import { CursorTrail } from "@/components/CursorTrail";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SITE } from "@/lib/site";
 
 import "./globals.css";
 
-/** Display face for headings: architectural, high end, editorial. */
+/** Display face for headings: engraved, high end, editorial. */
 const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -60,6 +61,7 @@ export default function RootLayout({
     <html lang="en" className={`${cinzel.variable} ${josefin.variable}`}>
       <body className="bg-navy text-ivory antialiased">
         <SmoothScroll />
+        <CursorTrail />
         {children}
       </body>
     </html>

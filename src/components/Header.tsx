@@ -57,7 +57,7 @@ export function Header({ onContact }: { onContact: () => void }) {
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-12">
           <a
             href="#top"
-            className="relative block h-9 w-[132px] shrink-0 sm:h-11 sm:w-[168px]"
+            className="relative block h-12 w-[184px] shrink-0 transition-opacity duration-300 hover:opacity-85 sm:h-16 sm:w-[248px] lg:h-[72px] lg:w-[288px]"
             aria-label={`${SITE.name} home`}
           >
             <Image
@@ -65,30 +65,26 @@ export function Header({ onContact }: { onContact: () => void }) {
               alt={SITE.name}
               fill
               priority
-              sizes="168px"
+              sizes="(max-width: 640px) 184px, (max-width: 1024px) 248px, 288px"
               className="object-contain object-left"
             />
           </a>
 
-          <nav className="hidden items-center gap-10 md:flex" aria-label="Primary">
+          {/*
+            Hairline gold rule framing the links, with a thin vertical divider before
+            the contact action. Reads as an engraved plate rather than a plain row.
+          */}
+          <nav
+            className="hidden items-center gap-9 rounded-full border border-ivory/12 bg-navy-deep/25 px-8 py-2.5 backdrop-blur-sm md:flex lg:gap-11"
+            aria-label="Primary"
+          >
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="group relative py-2 text-[0.7rem] font-medium tracking-[0.22em] text-ivory uppercase transition-colors duration-200 hover:text-gold"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 h-px w-0 bg-gold transition-[width] duration-300 ease-[var(--ease-luxe)] group-hover:w-full" />
-              </a>
+              <NavLink key={link.href} href={link.href} label={link.label} />
             ))}
 
-            <button
-              type="button"
-              onClick={onContact}
-              className="cursor-pointer rounded-full border border-ivory/30 px-6 py-2.5 text-[0.7rem] font-medium tracking-[0.22em] text-ivory uppercase transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
-            >
-              Contact
-            </button>
+            <span aria-hidden="true" className="h-5 w-px bg-ivory/15" />
+
+            <NavLink label="Contact" onClick={onContact} />
           </nav>
 
           <button
@@ -169,5 +165,70 @@ export function Header({ onContact }: { onContact: () => void }) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+/**
+ * Primary navigation item.
+ *
+ * The hover effect is a masked slide: the label is duplicated, the pair is stacked
+ * inside a fixed height clip, and the stack translates up by exactly one line on
+ * hover. The incoming copy is gold, so the label appears to roll over and change
+ * colour in one motion.
+ *
+ * The travel is `-translate-y-1/2`, not `-translate-y-full`. Percentage translations
+ * resolve against the moving element, which here is the two line stack: a full
+ * translation lifts both copies clear of the clip and the item reads as empty, while
+ * half the stack is exactly one line and lands the duplicate in the slot the
+ * original just left.
+ *
+ * Every box in the stack is pinned to the same `1.2em`, so the clip, each copy, and
+ * the travel distance stay locked together and track the font size rather than a
+ * hard coded pixel value. The extra `0.2em` over the cap height keeps the uppercase
+ * letters off the edges of the mask.
+ *
+ * Renders an anchor when given `href` and a button otherwise, so the contact action
+ * shares the exact same treatment without pretending to be a link.
+ */
+function NavLink({
+  label,
+  href,
+  onClick,
+}: {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}) {
+  const inner = (
+    <>
+      <span className="block h-[1.2em] overflow-hidden">
+        <span className="block transition-transform duration-[420ms] ease-[var(--ease-luxe)] group-hover:-translate-y-1/2">
+          <span className="flex h-[1.2em] items-center leading-none">{label}</span>
+          <span aria-hidden="true" className="flex h-[1.2em] items-center leading-none text-gold">
+            {label}
+          </span>
+        </span>
+      </span>
+
+      {/* Rule that draws in from the left as the label rolls. */}
+      <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-gold transition-[width] duration-[420ms] ease-[var(--ease-luxe)] group-hover:w-full" />
+    </>
+  );
+
+  const className =
+    "group relative cursor-pointer text-[0.7rem] font-medium tracking-[0.22em] text-ivory uppercase";
+
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {inner}
+    </button>
   );
 }

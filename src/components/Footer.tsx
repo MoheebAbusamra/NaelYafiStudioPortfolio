@@ -5,7 +5,7 @@ import Image from "next/image";
 import { InstagramIcon, SOCIAL_ICONS } from "@/components/icons/SocialIcons";
 import { CONTACT, SISTER_STUDIO, SITE, SOCIALS } from "@/lib/site";
 
-export function Footer({ onContact }: { onContact: () => void }) {
+export function Footer() {
   return (
     <footer className="relative bg-navy-deep text-ivory">
       {/* Gold hairline marking the transition out of the page body. */}
@@ -26,14 +26,6 @@ export function Footer({ onContact }: { onContact: () => void }) {
             </div>
 
             <p className="mt-7 max-w-md text-base leading-relaxed text-ivory/60">{SITE.description}</p>
-
-            <button
-              type="button"
-              onClick={onContact}
-              className="mt-9 inline-flex min-h-[52px] cursor-pointer items-center rounded-full border border-ivory/25 px-8 text-[0.68rem] font-medium tracking-[0.22em] text-ivory uppercase transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
-            >
-              Start a Conversation
-            </button>
           </div>
 
           <div className="grid gap-10 sm:grid-cols-2">
@@ -83,7 +75,9 @@ export function Footer({ onContact }: { onContact: () => void }) {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-ivory/10 pt-7 text-[0.62rem] tracking-[0.18em] text-ivory/40 uppercase sm:flex-row sm:items-center sm:justify-between">
+        {/* The copyright is centred on its own line, with the award note beneath it,
+            so the closing mark reads as a centred colophon rather than a split bar. */}
+        <div className="mt-16 flex flex-col items-center gap-2.5 border-t border-ivory/10 pt-7 text-center text-[0.62rem] tracking-[0.18em] text-ivory/40 uppercase">
           <p>
             &copy; {new Date().getFullYear()} {SITE.name}
           </p>

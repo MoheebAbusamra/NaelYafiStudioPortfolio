@@ -8,14 +8,18 @@ import { Minus, Plus } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/SocialIcons";
 import { CornerFrame, CrestRule } from "@/components/icons/Ornaments";
 import { SectionHeading } from "@/components/ScatteredGrid";
-import { ABOUT_PARAGRAPHS, AWARD, SERVICES, SISTER_STUDIO } from "@/lib/site";
+import { ABOUT_BLOCKS, AWARD, SERVICES, SISTER_STUDIO } from "@/lib/site";
 
 /**
  * About and Services as a single editorial split.
  *
- * Left column carries the narrative and the award artifact; right column is an
- * accordion of services plus the MNOY callout. The two columns stack on anything
- * below `lg`, with the narrative first so the story is never buried under a list.
+ * Three bands: the narrative and the services accordion sit side by side, then the
+ * two feature cards run beneath them in their own two column row.
+ *
+ * The cards are deliberately not nested inside the columns above. The narrative and
+ * the accordion are different heights, so a card anchored to the bottom of each
+ * column could never line up with its neighbour. Giving them their own grid row is
+ * what actually guarantees they sit level.
  */
 export function AboutServices() {
   return (
@@ -35,6 +39,11 @@ export function AboutServices() {
           <AboutColumn />
           <ServicesColumn />
         </div>
+
+        <div className="mt-14 grid gap-6 sm:gap-8 md:grid-cols-2 lg:mt-20">
+          <AwardCard />
+          <SisterStudioCard />
+        </div>
       </div>
     </section>
   );
@@ -51,52 +60,29 @@ function AboutColumn() {
       <p className="text-[0.62rem] font-medium tracking-[0.28em] text-gold uppercase">Our Story</p>
 
       <div className="mt-6 space-y-5">
-        {ABOUT_PARAGRAPHS.map((paragraph, index) => (
-          <p
-            key={index}
-            className={`leading-relaxed text-ivory/75 ${
-              index === 0 ? "text-lg sm:text-xl sm:leading-relaxed" : "text-base"
-            }`}
-          >
-            {paragraph}
-          </p>
-        ))}
-      </div>
+        {ABOUT_BLOCKS.map((block, index) => {
+          if (block.type === "heading") {
+            return (
+              <h3
+                key={index}
+                className="pt-5 font-display text-xl text-ivory sm:text-2xl"
+              >
+                {block.text}
+              </h3>
+            );
+          }
 
-      {/*
-        Award Winner card.
-
-        The corner flourishes are inset 10px and are 56px square, so their strokes
-        occupy roughly the outer 60px of each corner. The card therefore carries
-        extra padding on the diagonal the ornaments sit on (top left, bottom right),
-        which keeps the poster and the copy clear of the artwork instead of relying
-        on stacking order to hide a collision.
-      */}
-      <div className="relative mt-12 overflow-hidden rounded-[3px] border border-gold/25 bg-charcoal p-6 pt-14 pb-14 sm:p-8 sm:pt-16 sm:pb-16">
-        <CornerFrame opacity="opacity-45" size="size-14" inset={10} />
-
-        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
-          <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-[2px] sm:w-40">
-            <Image
-              src={AWARD.poster}
-              alt={`${AWARD.title} ${AWARD.year} announcement`}
-              fill
-              loading="lazy"
-              sizes="(max-width: 640px) 90vw, 160px"
-              className="object-cover"
-            />
-          </div>
-
-          <div className="min-w-0">
-            <div className="relative mb-4 size-14">
-              <Image src={AWARD.seal} alt="" fill sizes="56px" className="object-contain" />
-            </div>
-            <p className="font-display text-xl text-ivory sm:text-2xl">
-              {AWARD.title} {AWARD.year}
+          return (
+            <p
+              key={index}
+              className={`leading-relaxed text-ivory/75 ${
+                block.type === "lead" ? "text-lg sm:text-xl sm:leading-relaxed" : "text-base"
+              }`}
+            >
+              {block.text}
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-ivory/65">{AWARD.blurb}</p>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </motion.div>
   );
@@ -169,8 +155,51 @@ function ServicesColumn() {
           );
         })}
       </div>
+    </motion.div>
+  );
+}
 
-      <SisterStudioCard />
+/**
+ * Award Winner card.
+ *
+ * The corner flourishes are inset 10px and 56px square, so their strokes occupy
+ * roughly the outer 60px of each corner. The card carries extra padding on the
+ * diagonal the ornaments sit on, which keeps the poster and copy clear of the
+ * artwork rather than relying on stacking order to hide a collision.
+ */
+function AwardCard() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex h-full flex-col overflow-hidden rounded-[3px] border border-gold/25 bg-charcoal p-6 pt-14 pb-14 sm:p-8 sm:pt-16 sm:pb-16"
+    >
+      <CornerFrame opacity="opacity-45" size="size-14" inset={10} />
+
+      <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+        <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-[2px] sm:w-40">
+          <Image
+            src={AWARD.poster}
+            alt={`${AWARD.title} ${AWARD.year} announcement`}
+            fill
+            loading="lazy"
+            sizes="(max-width: 640px) 90vw, 160px"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="min-w-0">
+          <div className="relative mb-4 size-14">
+            <Image src={AWARD.seal} alt="" fill sizes="56px" className="object-contain" />
+          </div>
+          <p className="font-display text-xl text-ivory sm:text-2xl">
+            {AWARD.title} {AWARD.year}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-ivory/65">{AWARD.blurb}</p>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -178,10 +207,16 @@ function ServicesColumn() {
 /** Featured callout for the sister rendering studio, with a gold crest divider. */
 function SisterStudioCard() {
   return (
-    <div className="relative mt-12 overflow-hidden rounded-[3px] border border-gold/25 bg-navy p-7 pt-16 pb-14 sm:p-9 sm:pt-20 sm:pb-16">
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex h-full flex-col overflow-hidden rounded-[3px] border border-gold/25 bg-navy p-7 pt-16 pb-14 sm:p-9 sm:pt-20 sm:pb-16"
+    >
       <CornerFrame opacity="opacity-45" size="size-14" inset={10} />
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-1 flex-col">
         <p className="text-[0.6rem] font-medium tracking-[0.28em] text-gold uppercase">Sister Studio</p>
 
         <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
@@ -195,7 +230,7 @@ function SisterStudioCard() {
           href={SISTER_STUDIO.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-7 inline-flex min-h-[48px] cursor-pointer items-center gap-3 rounded-full border border-gold/40 px-6 text-[0.65rem] font-medium tracking-[0.2em] text-gold uppercase transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
+          className="mt-7 inline-flex min-h-[48px] w-fit cursor-pointer items-center gap-3 rounded-full border border-gold/40 px-6 text-[0.65rem] font-medium tracking-[0.2em] text-gold uppercase transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-navy-deep"
         >
           <InstagramIcon className="size-4" />
           {SISTER_STUDIO.handle}
@@ -204,6 +239,6 @@ function SisterStudioCard() {
 
       {/* Centred crest on the bottom border completes the engraved treatment. */}
       <CrestRule className="pointer-events-none absolute inset-x-0 bottom-3 z-0 mx-auto h-[26px] w-[180px] text-gold opacity-30" />
-    </div>
+    </motion.div>
   );
 }

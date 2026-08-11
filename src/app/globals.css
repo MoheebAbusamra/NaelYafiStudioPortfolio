@@ -137,6 +137,160 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /*
+    Featured showcase motion.
+
+    Three cooperating animations: the ring carries the previews around the hero
+    frame, each preview counter rotates by the same amount so it stays upright and
+    legible, and the hero frame itself drifts on a slow vertical float.
+
+    Both rotations read `--orbit-duration` from the stage, so a single value keeps
+    the ring and its counter rotation locked; if they drifted apart the previews
+    would slowly tumble. Every keyframe set resolves to its own rest position at
+    `100%`, which matters for the reduced motion block below: that override collapses
+    the duration and caps iterations at one, so each animation lands exactly where it
+    started instead of freezing mid rotation.
+  */
+  .orbit-ring {
+    animation: orbit-spin var(--orbit-duration, 48s) linear infinite;
+    will-change: transform;
+  }
+
+  /*
+    No `will-change` here on purpose. There is one counter per preview, each a full
+    stage sized box, and promoting all of them would allocate a stack of layers the
+    size of the stage for no gain: a transform only animation is already composited.
+  */
+  .orbit-counter {
+    animation: orbit-spin-reverse var(--orbit-duration, 48s) linear infinite;
+  }
+
+  .float-frame {
+    animation: float-frame 7.5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /*
+    The stage is a query container, so the ring radius and the preview sizes are
+    expressed in `cqw` and stay in proportion to the stage at every width. Sizing
+    them against the viewport instead would let the ring outgrow its own box on wide
+    screens, where the stage stops growing but `vw` does not.
+
+    Container units in these custom properties resolve where they are used, on the
+    descendants inside the stage, so the whole composition scales from a 320px phone
+    to the 880px cap without a single breakpoint or a measurement in JS.
+  */
+  .orbit-stage {
+    container-type: inline-size;
+
+    /* One turn of the ring. Slow enough to read a preview without chasing it. */
+    --orbit-duration: 48s;
+    /* Distance from the centre of the stage to the centre of a preview. */
+    --orbit-radius: 36cqw;
+    --orbit-size: 16cqw;
+    --orbit-hero: 52cqw;
+    /* Rake of the orbit plane away from the viewer, and the depth it is seen with. */
+    --orbit-tilt: 26deg;
+    --orbit-depth: 170cqw;
+  }
+
+  /*
+    The orbit is a real 3D ring, not an elliptical path faked in 2D. The plane is
+    raked back on X inside a perspective, the ring spins on Z within that plane, and
+    each preview undoes both rotations so it faces the viewer while travelling the
+    ellipse. Because the undo happens at the end of the chain the previews stay
+    upright yet keep their varying Z, so perspective alone makes the near side of the
+    orbit larger than the far side.
+
+    Every wrapper is a full size box pinned to the stage, which puts its transform
+    origin on the stage centre for the ring and on the preview's own ring point for
+    the counter rotation. That is what lets the rotations cancel to a pure
+    translation instead of smearing the previews around a second pivot.
+  */
+  .orbit-plane {
+    position: absolute;
+    inset: 0;
+    perspective: var(--orbit-depth);
+    transform-style: preserve-3d;
+    /* Wrappers span the stage, so they must never intercept the hero's pointer. */
+    pointer-events: none;
+  }
+
+  /*
+    The rake is its own element because `perspective` applies to an element's
+    children, not to itself. Setting both on one node would project the ring before
+    raking it and flatten the depth the orbit depends on.
+  */
+  .orbit-rake {
+    transform: rotateX(var(--orbit-tilt));
+  }
+
+  .orbit-rake,
+  .orbit-ring,
+  .orbit-slot,
+  .orbit-counter,
+  .orbit-upright {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+
+  /* `--orbit-angle` is set per preview to space the set evenly around the ring. */
+  .orbit-slot {
+    transform: rotate(var(--orbit-angle)) translate3d(var(--orbit-radius), 0, 0);
+  }
+
+  .orbit-upright {
+    transform: rotate(calc(-1 * var(--orbit-angle))) rotateX(calc(-1 * var(--orbit-tilt)));
+  }
+
+  /* Only the preview itself is clickable. */
+  .orbit-thumb {
+    pointer-events: auto;
+    width: var(--orbit-size);
+  }
+
+  /*
+    Hovering or tabbing into the stage holds the ring still, so a preview can be
+    read and clicked without chasing it. Both rotations pause together: pausing only
+    the ring would leave the counter rotation running and spin the previews in place.
+  */
+  .orbit-stage:hover .orbit-ring,
+  .orbit-stage:hover .orbit-counter,
+  .orbit-stage:focus-within .orbit-ring,
+  .orbit-stage:focus-within .orbit-counter {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes float-frame {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
 }
 
 /*
