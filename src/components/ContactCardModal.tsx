@@ -202,9 +202,9 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
       onClick={onFlip}
       className="backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)]"
       aria-label="Show contact details"
-      // Once flipped, the front is facing away; keep it out of the tab order.
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
+      {...(!active ? { inert: "" as unknown as boolean } : {})}
     >
       {/* Sheen, so the card reads as printed stock rather than a flat rectangle. */}
       <span className="pointer-events-none absolute inset-0 rounded-[10px] bg-[linear-gradient(115deg,transparent_38%,rgba(243,243,249,0.09)_50%,transparent_62%)]" />
@@ -260,12 +260,12 @@ function CardBack({
       <CornerFrame opacity="opacity-35" size="size-10" inset={7} />
 
       <div className="relative z-10 flex items-start justify-between gap-4">
-        <div className="relative h-9 w-28">
+        <div className="relative h-7 w-20 sm:h-9 sm:w-28">
           <Image
             src="/brand/logo-landscape-light.png"
             alt={SITE.name}
             fill
-            sizes="112px"
+            sizes="80px"
             className="object-contain object-left"
           />
         </div>

@@ -56,7 +56,7 @@ export function Header({ onContact }: { onContact: () => void }) {
       >
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-12">
           <a
-            href="#top"
+            href="/"
             className="relative block h-12 w-[184px] shrink-0 transition-opacity duration-300 hover:opacity-85 sm:h-16 sm:w-[248px] lg:h-[72px] lg:w-[288px]"
             aria-label={`${SITE.name} home`}
           >
@@ -141,7 +141,7 @@ export function Header({ onContact }: { onContact: () => void }) {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.06 * index + 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="border-b border-ivory/12 py-5 font-display text-3xl text-ivory"
+                  className="border-b border-ivory/12 py-5 font-display text-center text-2xl text-ivory whitespace-nowrap sm:text-3xl"
                 >
                   {link.label}
                 </motion.a>
@@ -156,7 +156,7 @@ export function Header({ onContact }: { onContact: () => void }) {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.06 * NAV_LINKS.length + 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-8 cursor-pointer rounded-full bg-gold px-8 py-4 text-sm tracking-[0.2em] text-navy-deep uppercase"
+                className="mx-auto mt-8 cursor-pointer rounded-full bg-gold px-8 py-4 text-sm tracking-[0.2em] text-navy-deep uppercase"
               >
                 Contact
               </motion.button>

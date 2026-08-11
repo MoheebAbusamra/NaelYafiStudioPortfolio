@@ -5,17 +5,9 @@ import { useState } from "react";
 import { ContactCardModal } from "@/components/ContactCardModal";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { ScatteredGrid } from "@/components/ScatteredGrid";
+import { AboutServices } from "@/components/AboutServices";
 
-/**
- * Single page composition.
- *
- * Contact modal state lives here because the header, hero, and footer all open it,
- * and the modal itself must render outside any transformed ancestor to stay fixed
- * to the viewport.
- */
-export default function Page() {
+export default function AboutPage() {
   const [contactOpen, setContactOpen] = useState(false);
   const openContact = () => setContactOpen(true);
 
@@ -23,9 +15,10 @@ export default function Page() {
     <>
       <Header onContact={openContact} />
 
-      <main>
-        <Hero />
-        <ScatteredGrid />
+      <main className="relative bg-navy">
+        <div className="mx-auto max-w-[1600px] px-5 py-16 sm:px-8 sm:py-24 lg:px-12 lg:py-32">
+          <AboutServices />
+        </div>
       </main>
 
       <Footer />

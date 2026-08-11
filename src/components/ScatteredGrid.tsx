@@ -44,14 +44,17 @@ export function ScatteredGrid() {
         <SectionHeading
           eyebrow="Selected Work"
           title="Spaces we have shaped"
-          copy="Each project begins with how a space will be lived in, then lets material and detail follow."
         />
 
-        {FEATURED_PROJECT ? (
-          <FeaturedProject />
-        ) : (
-          <PlaceholderPanel label="Featured project imagery is not available yet" />
-        )}
+        <div className="mt-10 h-px w-full gold-line-animated" />
+
+        <div className="mt-6 sm:mt-8">
+          {FEATURED_PROJECT ? (
+            <FeaturedProject />
+          ) : (
+            <PlaceholderPanel label="Featured project imagery is not available yet" />
+          )}
+        </div>
       </div>
 
       {/* The carousel bleeds to the right edge so slides run off screen rather than
@@ -144,10 +147,6 @@ function FeaturedProject() {
         className="mb-8 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16"
       >
         <div>
-          <span className="inline-flex items-center gap-2.5 rounded-full border border-gold/45 bg-gold/10 px-4 py-2 text-[0.6rem] font-medium tracking-[0.2em] text-gold uppercase">
-            {AWARD.title} {AWARD.year}
-          </span>
-
           <h3 className="mt-5 font-display text-[clamp(1.9rem,5vw,3.5rem)] leading-tight text-ivory">
             {project.title}
           </h3>

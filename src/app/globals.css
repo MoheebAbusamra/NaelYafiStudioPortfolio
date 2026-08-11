@@ -128,6 +128,12 @@
     transform-style: preserve-3d;
   }
 
+  .gold-line-animated {
+    background: linear-gradient(90deg, transparent, rgba(235,199,29,0.5), transparent);
+    background-size: 200% 100%;
+    animation: gold-line-shimmer 3s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
   /* Hides the native scrollbar on the carousel track without disabling scrolling. */
   .no-scrollbar {
     scrollbar-width: none;
@@ -290,6 +296,15 @@
   }
   50% {
     transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes gold-line-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 

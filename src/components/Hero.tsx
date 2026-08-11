@@ -218,9 +218,8 @@ export function Hero() {
             <span aria-hidden="true" className="break-words">
               {typed}
               <span
-                className={`ml-1 inline-block h-[0.78em] w-[3px] translate-y-[0.08em] bg-gold align-middle ${
-                  done ? "animate-[blink_1.1s_steps(2,start)_infinite]" : ""
-                }`}
+                className={`ml-1 inline-block h-[0.78em] w-[3px] translate-y-[0.08em] bg-gold align-middle ${done ? "animate-[blink_1.1s_steps(2,start)_infinite]" : ""
+                  }`}
                 style={{ opacity: reducedMotion ? 0 : 1 }}
               />
             </span>
@@ -286,16 +285,15 @@ function HeroHouse({
       <div className="pointer-events-none absolute inset-x-[10%] bottom-[6%] -z-10 h-1/2 rounded-[50%] bg-[radial-gradient(ellipse,rgba(235,199,29,0.18),transparent_70%)] blur-2xl" />
 
       <Image
-        src="/brand/home-house.webp"
+        src="/brand/ActualFinalHome2.png"
         alt="Residential interior design project by Nael Yafi Studio"
         width={1526}
         height={736}
         priority
         draggable={false}
         sizes="(max-width: 1024px) 100vw, 72vw"
-        className={`h-auto w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.55)] transition-[filter] duration-[850ms] ease-[var(--ease-luxe)] select-none ${
-          showColour ? "grayscale-0" : "grayscale"
-        }`}
+        className={`h-auto w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.55)] transition-[filter] duration-[850ms] ease-[var(--ease-luxe)] select-none ${showColour ? "grayscale-0" : "grayscale"
+          }`}
       />
     </div>
   );
