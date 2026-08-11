@@ -75,13 +75,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* The copyright is centred on its own line, with the award note beneath it,
-            so the closing mark reads as a centred colophon rather than a split bar. */}
         <div className="mt-16 flex flex-col items-center gap-2.5 border-t border-ivory/10 pt-7 text-center text-[0.62rem] tracking-[0.18em] text-ivory/40 uppercase">
           <p>
             &copy; {new Date().getFullYear()} {SITE.name}
           </p>
-          <p className="text-gold/60">Canadian Choice Award Winner 2026</p>
         </div>
       </div>
     </footer>
