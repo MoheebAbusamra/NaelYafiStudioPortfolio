@@ -18,7 +18,6 @@ import type { GalleryImage } from "@/lib/projects";
 export function ProjectCard({
   image,
   title,
-  meta,
   priority = false,
   sizes,
   className = "",
@@ -29,7 +28,6 @@ export function ProjectCard({
 }: {
   image: GalleryImage;
   title: string;
-  meta?: string;
   priority?: boolean;
   sizes: string;
   className?: string;
@@ -102,25 +100,6 @@ export function ProjectCard({
               hovered ? "ring-gold/40" : ""
             }`}
           />
-
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-5">
-            <p
-              className={`font-display text-base text-ivory transition-transform duration-500 ease-[var(--ease-luxe)] sm:text-lg ${
-                hovered ? "translate-y-0" : "translate-y-1"
-              }`}
-            >
-              {title}
-            </p>
-            {meta && (
-              <p
-                className={`mt-1 text-[0.62rem] tracking-[0.2em] text-gold/85 uppercase transition-all duration-500 ${
-                  hovered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
-                }`}
-              >
-                {meta}
-              </p>
-            )}
-          </div>
         </button>
       </div>
     </motion.div>

@@ -24,7 +24,6 @@ import { SECONDARY_PROJECTS, type Project } from "@/lib/projects";
 type DeckCard = {
   key: string;
   title: string;
-  meta: string;
   image: Project["cover"];
 };
 
@@ -40,7 +39,6 @@ const SWIPE_VELOCITY = 500;
 const projectToCard = (project: Project): DeckCard => ({
   key: project.slug,
   title: project.title,
-  meta: [project.meta.discipline, project.meta.location].filter(Boolean).join("  |  "),
   image: project.cover,
 });
 
@@ -290,13 +288,6 @@ function StackCard({
         />
 
         <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/10 to-transparent" />
-
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-1 p-5">
-          <span className="truncate font-display text-lg text-ivory sm:text-xl">{card.title}</span>
-          <span className="truncate text-[0.55rem] tracking-[0.2em] text-gold/85 uppercase sm:text-[0.62rem]">
-            {card.meta}
-          </span>
-        </span>
       </motion.div>
     </motion.div>
   );

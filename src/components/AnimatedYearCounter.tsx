@@ -8,7 +8,7 @@ const END_YEAR = 2026
 const DIGIT_HEIGHT_EM = 1.1
 
 const YEARS: number[] = []
-for (let y = START_YEAR; y <= END_YEAR; y++) YEARS.push(y)
+for (let y = END_YEAR; y >= START_YEAR; y--) YEARS.push(y)
 
 export default function AnimatedYearCounter() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -51,9 +51,10 @@ export default function AnimatedYearCounter() {
         className="relative select-none overflow-hidden"
         style={{
           height: `${DIGIT_HEIGHT_EM}em`,
-          fontSize: "clamp(4rem, 14vw, 10rem)",
+          fontSize: "clamp(5rem, 18vw, 14rem)",
           lineHeight: 1,
-          paddingInline: "0.15em",
+          paddingInline: "1.8em",
+          minWidth: "8rem",
         }}
       >
         {/* Rolling reel */}
@@ -64,7 +65,7 @@ export default function AnimatedYearCounter() {
           }}
         >
           {YEARS.map((year) => {
-            const isFinal = year === END_YEAR
+              const isFinal = year === START_YEAR
             return (
               <motion.span
                 key={year}
@@ -83,7 +84,7 @@ export default function AnimatedYearCounter() {
                       }
                 }
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="block font-sans font-bold tabular-nums tracking-tight"
+                className="block font-sans font-bold tabular-nums tracking-[0.18em]"
                 style={{ height: `${DIGIT_HEIGHT_EM}em` }}
               >
                 {year}
@@ -111,7 +112,7 @@ export default function AnimatedYearCounter() {
       </div>
 
       {/* Screen-reader accessible final value */}
-      <span className="sr-only">{END_YEAR}</span>
+      <span className="sr-only">{START_YEAR}</span>
 
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}

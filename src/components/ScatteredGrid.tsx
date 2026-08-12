@@ -29,7 +29,6 @@ export function ScatteredGrid() {
         project.images.map((image) => ({
           image,
           title: project.title,
-          meta: [project.meta.discipline, project.meta.location].filter(Boolean).join("  |  "),
           key: `${project.slug}-${image.id}`,
         })),
       ),
@@ -102,7 +101,6 @@ export function ScatteredGrid() {
                   key={card.key}
                   image={card.image}
                   title={card.title}
-                  meta={card.meta}
                   index={index}
                   // Uniform 4:5 keeps the reel's baseline steady; mixed portrait and
                   // landscape ratios would make the track height jump on every wrap.

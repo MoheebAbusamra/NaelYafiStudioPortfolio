@@ -323,14 +323,7 @@ export function ProjectShowcase({
                   />
 
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
-                    <span className="min-w-0">
-                      <span className="block truncate font-display text-base text-ivory sm:text-xl">
-                        {title}
-                      </span>
-                      <span className="mt-1 block text-[0.55rem] tracking-[0.2em] text-gold/85 uppercase sm:text-[0.62rem]">
-                        Frame {safeIndex + 1} of {images.length}
-                      </span>
-                    </span>
+                    <span className="min-w-0" />
 
                     <span
                       className={`flex size-9 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-navy-deep/70 text-gold transition-opacity duration-500 ${
