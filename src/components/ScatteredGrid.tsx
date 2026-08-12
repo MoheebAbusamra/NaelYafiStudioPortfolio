@@ -154,16 +154,28 @@ function FeaturedProject() {
         {project.meta.narrative && (
           <div className="flex max-w-md flex-col items-start gap-5">
             {/* The award seal sits directly above the project narrative. */}
-            <div className="relative size-[104px] shrink-0 sm:size-[124px]">
+            <motion.div
+              className="relative size-[104px] shrink-0 sm:size-[124px]"
+              style={{ perspective: 1000 }}
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
               <div className="absolute inset-0 -z-10 scale-125 rounded-full bg-[radial-gradient(circle,rgba(235,199,29,0.22),transparent_70%)] blur-lg" />
-              <Image
-                src={AWARD.seal}
-                alt={`${AWARD.title} ${AWARD.year}`}
-                fill
-                sizes="124px"
-                className="object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
-              />
-            </div>
+              <motion.div
+                className="relative size-full"
+                style={{ transformStyle: "preserve-3d" }}
+                animate={{ rotateY: 360 }}
+                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              >
+                <Image
+                  src={AWARD.seal}
+                  alt={`${AWARD.title} ${AWARD.year}`}
+                  fill
+                  sizes="124px"
+                  className="object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
+                />
+              </motion.div>
+            </motion.div>
 
             <p className="text-sm leading-relaxed text-ivory/70 sm:text-base">{project.meta.narrative}</p>
           </div>

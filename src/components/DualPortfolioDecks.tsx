@@ -122,9 +122,6 @@ function Deck({ label, cards, dir }: { label: string; cards: DeckCard[]; dir: 1 
     <div>
       <div className="mb-8 flex items-baseline justify-between gap-4">
         <h3 className="font-display text-2xl text-ivory sm:text-3xl">{label}</h3>
-        <p className="text-[0.6rem] tracking-[0.24em] text-gold/80 uppercase" aria-live="polite">
-          {topIndex + 1} / {cards.length}
-        </p>
       </div>
 
       {/*

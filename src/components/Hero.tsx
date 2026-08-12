@@ -38,19 +38,38 @@ const MAX_ZOOM = 1.42;
 const PIN_DISTANCE = 1.05;
 
 /**
+ * Track when the video loader overlay finishes so hero animations sync cleanly.
+ */
+function useLoaderFinished() {
+  const [finished, setFinished] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return Boolean(sessionStorage.getItem("nysi_video_loader_played"));
+  });
+
+  useEffect(() => {
+    if (finished) return;
+
+    const onFinished = () => setFinished(true);
+    window.addEventListener("nysi:loaderFinished", onFinished);
+    return () => window.removeEventListener("nysi:loaderFinished", onFinished);
+  }, [finished]);
+
+  return finished;
+}
+
+/**
  * Types the headline one character at a time.
  *
  * The full string is always present in the DOM for assistive technology and for
  * layout reservation; only the visible slice changes, so the heading never reflows
  * as characters arrive. Reduced motion skips straight to the finished string.
  */
-function useTypewriter(text: string, enabled: boolean) {
+function useTypewriter(text: string, enabled: boolean, start: boolean) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    // Reduced motion: the render below already falls back to the full string, so
-    // there is nothing to schedule and no state to set.
-    if (!enabled) return;
+    // Reduced motion or waiting for video loader to finish: return early
+    if (!enabled || !start) return;
 
     let frame = 0;
     let timer: ReturnType<typeof setTimeout>;
@@ -62,9 +81,9 @@ function useTypewriter(text: string, enabled: boolean) {
     };
 
     // Small lead in so the section settles before the type starts.
-    timer = setTimeout(step, 420);
+    timer = setTimeout(step, 300);
     return () => clearTimeout(timer);
-  }, [text, enabled]);
+  }, [text, enabled, start]);
 
   const visible = enabled ? count : text.length;
   return { typed: text.slice(0, visible), done: visible >= text.length };
@@ -72,7 +91,8 @@ function useTypewriter(text: string, enabled: boolean) {
 
 export function Hero() {
   const reducedMotion = useReducedMotion();
-  const { typed, done } = useTypewriter(HEADLINE, !reducedMotion);
+  const loaderFinished = useLoaderFinished();
+  const { typed, done } = useTypewriter(HEADLINE, !reducedMotion, loaderFinished);
   const sectionRef = useRef<HTMLElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
@@ -205,7 +225,7 @@ export function Hero() {
         <div className="max-w-2xl lg:max-w-[46%]">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={loaderFinished ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mb-6 text-[0.65rem] font-medium tracking-[0.3em] text-gold uppercase sm:text-xs sm:tracking-[0.36em]"
           >
@@ -227,7 +247,7 @@ export function Hero() {
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={loaderFinished ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             transition={{ delay: reducedMotion ? 0.1 : 1.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 max-w-xl text-base leading-relaxed text-ivory/70 sm:text-lg"
           >

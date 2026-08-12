@@ -3,6 +3,7 @@ import { Cinzel, Josefin_Sans } from "next/font/google";
 
 import { CursorTrail } from "@/components/CursorTrail";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { VideoLoadingOverlay } from "@/components/VideoLoadingOverlay";
 import { SITE } from "@/lib/site";
 
 import "./globals.css";
@@ -60,6 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cinzel.variable} ${josefin.variable}`}>
       <body className="bg-navy text-ivory antialiased">
+        <VideoLoadingOverlay />
         <SmoothScroll />
         <CursorTrail />
         {children}

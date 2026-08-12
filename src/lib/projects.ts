@@ -18,8 +18,8 @@ export type ProjectMeta = {
 const META: Record<string, ProjectMeta> = {
   "oakville-project": {
     location: "Oakville, Ontario",
-    year: "2026",
-    discipline: "Interior Design",
+    year: "2025",
+    discipline: "Interior design renovation",
     narrative:
       "A full residential interior in Oakville, resolved around a central stair and a restrained palette of white oak, warm stone, and brushed metal. This is the project behind our 2026 Canadian Choice Award.",
   },

@@ -340,17 +340,13 @@ export function ProjectShowcase({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 sm:mt-8">
-        <p className="text-[0.6rem] tracking-[0.2em] text-gold/80 uppercase sm:text-[0.65rem]">
-          {meta}
-        </p>
-
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:mt-8">
         <button
           type="button"
           onClick={onViewAll}
           className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-gold/50 bg-navy-deep/60 px-6 text-[0.6rem] font-medium tracking-[0.2em] text-gold uppercase transition-colors duration-300 hover:bg-gold hover:text-navy-deep"
         >
-          View all {images.length} frames
+          View All Frames
         </button>
       </div>
     </div>
