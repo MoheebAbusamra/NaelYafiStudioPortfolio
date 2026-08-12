@@ -43,7 +43,7 @@ export const SISTER_STUDIO = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "View our work", href: "/#work" },
+  { label: "View our work", href: "/view-our-work" },
   { label: "About & Services", href: "/about" },
 ] as const;
 

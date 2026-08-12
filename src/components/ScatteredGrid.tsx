@@ -1,42 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import { Carousel } from "@/components/Carousel";
-import { ProjectCard } from "@/components/ProjectCard";
 import { FramesModal, ProjectShowcase } from "@/components/ProjectShowcase";
-import { Lightbox } from "@/components/Lightbox";
-import { FEATURED_PROJECT, FILTERS, SECONDARY_PROJECTS, type FilterId } from "@/lib/projects";
+import { FEATURED_PROJECT } from "@/lib/projects";
 import { AWARD } from "@/lib/site";
 
 export function ScatteredGrid() {
-  const [filter, setFilter] = useState<FilterId>("all");
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  const visibleProjects = useMemo(
-    () =>
-      filter === "all" ? SECONDARY_PROJECTS : SECONDARY_PROJECTS.filter((p) => p.category === filter),
-    [filter],
-  );
-
-  // One entry per image, so the viewer can page through everything currently
-  // shown, in display order.
-  const cards = useMemo(
-    () =>
-      visibleProjects.flatMap((project) =>
-        project.images.map((image) => ({
-          image,
-          title: project.title,
-          key: `${project.slug}-${image.id}`,
-        })),
-      ),
-    [visibleProjects],
-  );
-
-  // The featured project now owns its own viewer through `FramesModal`, so this
-  // component's lightbox only ever paginates the carousel set.
   return (
     <section id="work" className="relative bg-navy py-(--spacing-section)">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
@@ -55,72 +27,6 @@ export function ScatteredGrid() {
           )}
         </div>
       </div>
-
-      {/* The carousel bleeds to the right edge so slides run off screen rather than
-          stopping at the container, which reads as a continuous reel. */}
-      <div className="mt-24 sm:mt-32">
-        <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-          <div className="mb-10 flex flex-wrap items-center gap-2 sm:gap-3">
-            {FILTERS.map((option) => {
-              const active = filter === option.id;
-              return (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => setFilter(option.id)}
-                  aria-pressed={active}
-                  className={`min-h-[44px] cursor-pointer rounded-full px-6 text-[0.65rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300 sm:text-xs ${
-                    active
-                      ? "bg-gold text-navy-deep"
-                      : "border border-ivory/25 text-ivory/70 hover:border-gold/60 hover:text-gold"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {cards.length === 0 ? (
-          <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-            <PlaceholderPanel label="No projects in this category yet" />
-          </div>
-        ) : (
-          <div className="pl-5 sm:pl-8 lg:pl-12">
-            <Carousel
-              // Remounts on filter change so measurement and offset reset cleanly
-              // instead of inheriting the previous set's width.
-              key={filter}
-              ariaLabel={`${FILTERS.find((f) => f.id === filter)?.label ?? "Projects"} carousel`}
-              itemClassName="w-[78vw] sm:w-[46vw] lg:w-[32vw] xl:w-[25vw]"
-              className="pr-5 sm:pr-8 lg:pr-12"
-            >
-              {cards.map((card, index) => (
-                <ProjectCard
-                  key={card.key}
-                  image={card.image}
-                  title={card.title}
-                  index={index}
-                  // Uniform 4:5 keeps the reel's baseline steady; mixed portrait and
-                  // landscape ratios would make the track height jump on every wrap.
-                  aspect={4 / 5}
-                  reveal={false}
-                  sizes="(max-width: 640px) 78vw, (max-width: 1024px) 46vw, 25vw"
-                  onOpen={() => setLightboxIndex(index)}
-                />
-              ))}
-            </Carousel>
-          </div>
-        )}
-      </div>
-
-      <Lightbox
-        items={cards}
-        index={lightboxIndex}
-        onClose={() => setLightboxIndex(null)}
-        onNavigate={setLightboxIndex}
-      />
     </section>
   );
 }

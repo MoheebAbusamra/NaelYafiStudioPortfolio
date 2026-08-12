@@ -112,7 +112,12 @@ export function Header({ onContact }: { onContact: () => void }) {
             aria-label="Menu"
           >
             <div className="flex items-center justify-between px-5 py-4">
-              <div className="relative h-9 w-[132px]">
+              <a
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                className="relative block h-9 w-[132px]"
+                aria-label={`${SITE.name} home`}
+              >
                 <Image
                   src="/brand/logo-landscape-light.png"
                   alt={SITE.name}
@@ -120,7 +125,7 @@ export function Header({ onContact }: { onContact: () => void }) {
                   sizes="132px"
                   className="object-contain object-left"
                 />
-              </div>
+              </a>
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}

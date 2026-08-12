@@ -8,20 +8,19 @@ import { Minus, Plus } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/SocialIcons";
 import { CornerFrame, CrestRule } from "@/components/icons/Ornaments";
 import { SectionHeading } from "@/components/ScatteredGrid";
-import { ABOUT_BLOCKS, AWARD, SERVICES, SISTER_STUDIO } from "@/lib/site";
+import { ABOUT_BLOCKS, AboutBlock, AWARD, SERVICES, SISTER_STUDIO } from "@/lib/site";
 
 /**
  * About and Services as a single editorial split.
  *
- * Three bands: the narrative and the services accordion sit side by side, then the
- * two feature cards run beneath them in their own two column row.
- *
- * The cards are deliberately not nested inside the columns above. The narrative and
- * the accordion are different heights, so a card anchored to the bottom of each
- * column could never line up with its neighbour. Giving them their own grid row is
- * what actually guarantees they sit level.
+ * Two stacked grid sections: the Nael Yafi bio and portrait sit side by side,
+ * then the studio overview and services accordion sit below them in their own
+ * two column row. The two feature cards run beneath everything unchanged.
  */
 export function AboutServices() {
+  const studioBlocks = ABOUT_BLOCKS.slice(0, 2);
+  const bioBlocks = ABOUT_BLOCKS.slice(2);
+
   return (
     <section id="about" className="relative bg-navy-soft py-(--spacing-section)">
       {/* Soft tonal break above and below the section. */}
@@ -35,11 +34,19 @@ export function AboutServices() {
           copy="We design in warm materials and clear proportion, then stay close to the build so what is drawn is what gets made."
         />
 
+        {/* Top Grid: Nael Yafi bio text LEFT | Nael portrait RIGHT */}
         <div className="mt-16 grid gap-14 lg:mt-20 lg:grid-cols-2 lg:gap-20">
-          <AboutColumn />
+          <BioColumn blocks={bioBlocks} />
+          <BioImage />
+        </div>
+
+        {/* Lower Grid: Studio overview LEFT | What We Do RIGHT */}
+        <div className="mt-14 grid gap-14 lg:mt-20 lg:grid-cols-2 lg:gap-20">
+          <StudioOverview blocks={studioBlocks} />
           <ServicesColumn />
         </div>
 
+        {/* Card decks at bottom - unchanged */}
         <div className="mt-14 grid gap-6 sm:gap-8 md:grid-cols-2 lg:mt-20">
           <AwardCard />
           <SisterStudioCard />
@@ -49,7 +56,7 @@ export function AboutServices() {
   );
 }
 
-function AboutColumn() {
+function BioColumn({ blocks }: { blocks: AboutBlock[] }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -60,7 +67,7 @@ function AboutColumn() {
       <p className="text-[0.62rem] font-medium tracking-[0.28em] text-gold uppercase">Our Story</p>
 
       <div className="mt-6 space-y-5">
-        {ABOUT_BLOCKS.map((block, index) => {
+        {blocks.map((block, index) => {
           if (block.type === "heading") {
             return (
               <h3
@@ -75,9 +82,58 @@ function AboutColumn() {
           return (
             <p
               key={index}
-              className={`leading-relaxed text-ivory/75 ${
-                block.type === "lead" ? "text-lg sm:text-xl sm:leading-relaxed" : "text-base"
-              }`}
+              className={`leading-relaxed text-ivory/75 ${block.type === "lead" ? "text-lg sm:text-xl sm:leading-relaxed" : "text-base"
+                }`}
+            >
+              {block.text}
+            </p>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
+function BioImage() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-90px" }}
+      transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex items-center"
+    >
+      <div className="group relative h-[68vh] min-h-[520px] max-h-[880px] w-full overflow-hidden rounded-[3px] bg-charcoal">
+        <Image
+          src="/gallery/NaelImage.JPEG"
+          alt="Nael Yafi, Creative Director"
+          fill
+          loading="lazy"
+          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 46vw, 40vw"
+          className="object-cover object-top grayscale transition-[filter] duration-500 select-none group-hover:grayscale-0"
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+function StudioOverview({ blocks }: { blocks: AboutBlock[] }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-90px" }}
+      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <p className="text-[0.62rem] font-medium tracking-[0.28em] text-gold uppercase">Our Story</p>
+
+      <div className="mt-6 space-y-5">
+        {blocks.map((block, index) => {
+          return (
+            <p
+              key={index}
+              className={`leading-relaxed text-ivory/75 ${block.type === "lead" ? "text-lg sm:text-xl sm:leading-relaxed" : "text-base"
+                }`}
             >
               {block.text}
             </p>
