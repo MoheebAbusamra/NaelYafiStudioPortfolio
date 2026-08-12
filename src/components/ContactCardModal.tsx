@@ -171,7 +171,7 @@ export function ContactCardModal({ open, onClose }: { open: boolean; onClose: ()
                   card keeps the true card proportion.
                 */}
                 <div
-                  className="preserve-3d relative aspect-[1.42/1] min-h-[272px] w-full transition-transform duration-[750ms] ease-[var(--ease-luxe)] sm:aspect-[1.66/1] sm:min-h-0"
+                  className="preserve-3d relative aspect-[1.42/1] min-h-[288px] w-full transition-transform duration-[750ms] ease-[var(--ease-luxe)] sm:aspect-[1.66/1] sm:min-h-0"
                   style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
                 >
                   <CardFront onFlip={() => setFlipped(true)} active={!flipped} />
@@ -200,11 +200,19 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
     <button
       type="button"
       onClick={onFlip}
-      className="backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)]"
+      // `pointer-events-none` when flipped away is a belt and braces guard beside
+      // `inert`: some mobile WebKit builds ignore backface for hit testing, which
+      // let the hidden front's labels intercept taps meant for the email field.
+      className={`backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] ${
+        active ? "" : "pointer-events-none"
+      }`}
       aria-label="Show contact details"
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
-      {...(!active ? { inert: "" as unknown as boolean } : {})}
+      // React 19 supports `inert` as a true boolean; the old empty-string hack
+      // logged a console error and was treated as false, leaving the hidden face
+      // focusable behind the visible one.
+      inert={!active}
     >
       {/* Sheen, so the card reads as printed stock rather than a flat rectangle. */}
       <span className="pointer-events-none absolute inset-0 rounded-[10px] bg-[linear-gradient(115deg,transparent_38%,rgba(243,243,249,0.09)_50%,transparent_62%)]" />
@@ -250,11 +258,18 @@ function CardBack({
 }) {
   return (
     <div
-      className="backface-hidden absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-5 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7"
+      // `isolate` pins a local stacking context so the decorative corner frames
+      // and ring overlays can never climb above the email row on mobile Safari.
+      className={`backface-hidden isolate absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-4 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7 ${
+        active ? "" : "pointer-events-none"
+      }`}
       style={{ transform: "rotateY(180deg)" }}
       // The back is behind the front until flipped; hide it from AT and tab order.
       aria-hidden={!active}
-      {...(!active ? { inert: "" as unknown as boolean } : {})}
+      // React 19 supports `inert` as a true boolean; the old empty-string hack
+      // logged a console error and was treated as false, leaving the hidden face
+      // focusable behind the visible one.
+      inert={!active}
     >
       <span className="pointer-events-none absolute inset-0 rounded-[10px] ring-1 ring-gold/12 ring-inset" />
       <CornerFrame opacity="opacity-35" size="size-10" inset={7} />
@@ -293,7 +308,7 @@ function CardBack({
         <div className="mt-2 flex min-h-[44px] items-stretch overflow-hidden rounded-[4px] border border-ivory/15 bg-ivory/5 transition-colors focus-within:border-gold/50 hover:border-gold/40">
           <a
             href={`mailto:${CONTACT.email}`}
-            className="flex min-w-0 flex-1 items-center px-3.5 text-sm text-ivory transition-colors hover:text-gold"
+            className="flex min-w-0 flex-1 items-center px-3 text-[0.8rem] text-ivory transition-colors hover:text-gold sm:px-3.5 sm:text-sm"
             aria-label={`Send an email to ${CONTACT.email}`}
             tabIndex={active ? 0 : -1}
           >
