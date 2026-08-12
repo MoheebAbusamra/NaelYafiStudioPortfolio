@@ -43,7 +43,6 @@ export function PanoramaViewer() {
       1,
       1100,
     );
-    camera.target = new THREE.Vector3(0, 0, 0);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({
