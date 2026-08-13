@@ -33,7 +33,7 @@ export default function ViewOurWorkPage() {
               Selected Works & Spatial Experience
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-ivory/65 sm:text-lg">
-              Explore our architectural and interior design projects across Canada and internationally.
+              Explore our interior design projects across Canada and internationally.
               Each space is crafted with natural materials, warmth, and precision.
             </p>
           </motion.div>

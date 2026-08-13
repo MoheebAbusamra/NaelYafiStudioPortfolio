@@ -203,9 +203,8 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
       // `pointer-events-none` when flipped away is a belt and braces guard beside
       // `inert`: some mobile WebKit builds ignore backface for hit testing, which
       // let the hidden front's labels intercept taps meant for the email field.
-      className={`backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] ${
-        active ? "" : "pointer-events-none"
-      }`}
+      className={`backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] ${active ? "" : "pointer-events-none"
+        }`}
       aria-label="Show contact details"
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
@@ -235,7 +234,7 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
       <span className="relative z-10 h-px w-14 bg-gold/50" />
 
       <span className="relative z-10 text-[0.6rem] tracking-[0.3em] text-ivory/60 uppercase">
-        Architecture &amp; Interior Design
+        Interior Design
       </span>
 
       <span className="relative z-10 mt-1 text-[0.58rem] tracking-[0.22em] text-gold uppercase">
@@ -260,9 +259,8 @@ function CardBack({
     <div
       // `isolate` pins a local stacking context so the decorative corner frames
       // and ring overlays can never climb above the email row on mobile Safari.
-      className={`backface-hidden isolate absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-4 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7 ${
-        active ? "" : "pointer-events-none"
-      }`}
+      className={`backface-hidden isolate absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-4 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7 ${active ? "" : "pointer-events-none"
+        }`}
       style={{ transform: "rotateY(180deg)" }}
       // The back is behind the front until flipped; hide it from AT and tab order.
       aria-hidden={!active}
@@ -335,9 +333,8 @@ function CardBack({
           {copied ? "Email address copied to clipboard" : ""}
         </span>
         <span
-          className={`mt-1.5 block text-[0.58rem] tracking-[0.2em] text-gold uppercase transition-opacity duration-300 ${
-            copied ? "opacity-100" : "opacity-0"
-          }`}
+          className={`mt-1.5 block text-[0.58rem] tracking-[0.2em] text-gold uppercase transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"
+            }`}
           aria-hidden="true"
         >
           Copied

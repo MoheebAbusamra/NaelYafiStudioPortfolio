@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useInView, animate } from "framer-motion"
 
-const START_YEAR = 2013
+const START_YEAR = 2016
 const END_YEAR = 2026
 const DIGIT_HEIGHT_EM = 1.1
 
@@ -65,23 +65,23 @@ export default function AnimatedYearCounter() {
           }}
         >
           {YEARS.map((year) => {
-              const isFinal = year === START_YEAR
+            const isFinal = year === START_YEAR
             return (
               <motion.span
                 key={year}
                 animate={
                   isFinal && landed
                     ? {
-                        color: "#EBC71D",
-                        textShadow:
-                          "0 0 24px rgba(235, 199, 29, 0.45), 0 0 64px rgba(235, 199, 29, 0.2)",
-                        scale: 1.04,
-                      }
+                      color: "#EBC71D",
+                      textShadow:
+                        "0 0 24px rgba(235, 199, 29, 0.45), 0 0 64px rgba(235, 199, 29, 0.2)",
+                      scale: 1.04,
+                    }
                     : {
-                        color: "#F3F3F9",
-                        textShadow: "0 0 0px rgba(235, 199, 29, 0)",
-                        scale: 1,
-                      }
+                      color: "#F3F3F9",
+                      textShadow: "0 0 0px rgba(235, 199, 29, 0)",
+                      scale: 1,
+                    }
                 }
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="block font-sans font-bold tabular-nums tracking-[0.18em]"
