@@ -203,8 +203,9 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
       // `pointer-events-none` when flipped away is a belt and braces guard beside
       // `inert`: some mobile WebKit builds ignore backface for hit testing, which
       // let the hidden front's labels intercept taps meant for the email field.
-      className={`backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] ${active ? "" : "pointer-events-none"
-        }`}
+      className={`backface-hidden absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[10px] border border-gold/30 bg-gradient-to-br from-navy-soft via-navy to-navy-deep p-8 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] transition-opacity duration-300 ${
+        active ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+      }`}
       aria-label="Show contact details"
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
@@ -221,7 +222,7 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
           tall, so a larger flourish would reach the logo. */}
       <CornerFrame opacity="opacity-45" size="size-11" inset={8} />
 
-      <span className="relative z-10 block h-16 w-40 sm:h-20 sm:w-48">
+      <span className="backface-hidden relative z-10 block h-16 w-40 sm:h-20 sm:w-48">
         <Image
           src="/brand/logo-portrait-light.png"
           alt={SITE.name}
@@ -231,13 +232,13 @@ function CardFront({ onFlip, active }: { onFlip: () => void; active: boolean }) 
         />
       </span>
 
-      <span className="relative z-10 h-px w-14 bg-gold/50" />
+      <span className="backface-hidden relative z-10 h-px w-14 bg-gold/50" />
 
-      <span className="relative z-10 text-[0.6rem] tracking-[0.3em] text-ivory/60 uppercase">
+      <span className="backface-hidden relative z-10 text-[0.6rem] tracking-[0.3em] text-ivory/60 uppercase">
         Interior Design
       </span>
 
-      <span className="relative z-10 mt-1 text-[0.58rem] tracking-[0.22em] text-gold uppercase">
+      <span className="backface-hidden relative z-10 mt-1 text-[0.58rem] tracking-[0.22em] text-gold uppercase">
         Click to flip
       </span>
     </button>
@@ -259,8 +260,9 @@ function CardBack({
     <div
       // `isolate` pins a local stacking context so the decorative corner frames
       // and ring overlays can never climb above the email row on mobile Safari.
-      className={`backface-hidden isolate absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-4 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] sm:gap-2 sm:p-7 ${active ? "" : "pointer-events-none"
-        }`}
+      className={`backface-hidden isolate absolute inset-0 flex flex-col justify-between gap-3 overflow-hidden rounded-[10px] border border-gold/30 bg-gradient-to-br from-charcoal to-navy-deep p-4 shadow-[0_35px_70px_-18px_rgba(0,0,0,0.7)] transition-opacity duration-300 sm:gap-2 sm:p-7 ${
+        active ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+      }`}
       style={{ transform: "rotateY(180deg)" }}
       // The back is behind the front until flipped; hide it from AT and tab order.
       aria-hidden={!active}
@@ -272,8 +274,8 @@ function CardBack({
       <span className="pointer-events-none absolute inset-0 rounded-[10px] ring-1 ring-gold/12 ring-inset" />
       <CornerFrame opacity="opacity-35" size="size-10" inset={7} />
 
-      <div className="relative z-10 flex items-start justify-between gap-4">
-        <div className="relative h-7 w-20 sm:h-9 sm:w-28">
+      <div className="relative z-10 flex items-start justify-between gap-4 -mt-1 sm:mt-0">
+        <div className="relative -mt-1.5 h-7 w-20 sm:mt-0 sm:h-9 sm:w-28">
           <Image
             src="/brand/logo-landscape-light.png"
             alt={SITE.name}
@@ -333,8 +335,9 @@ function CardBack({
           {copied ? "Email address copied to clipboard" : ""}
         </span>
         <span
-          className={`mt-1.5 block text-[0.58rem] tracking-[0.2em] text-gold uppercase transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"
-            }`}
+          className={`mt-1.5 block text-[0.58rem] tracking-[0.2em] text-gold uppercase transition-opacity duration-300 ${
+            copied ? "opacity-100" : "opacity-0"
+          }`}
           aria-hidden="true"
         >
           Copied
