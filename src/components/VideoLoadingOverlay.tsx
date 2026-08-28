@@ -116,7 +116,7 @@ export function VideoLoadingOverlay({
             preload="auto"
             onEnded={handleFinish}
             onError={handleFinish}
-            className="w-full h-full max-w-full max-h-full object-contain md:object-cover pointer-events-none"
+            className="w-full h-full max-w-full max-h-full object-fill md:object-cover pointer-events-none"
           />
         </motion.div>
       )}
