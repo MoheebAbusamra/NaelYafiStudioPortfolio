@@ -102,7 +102,7 @@ export function VideoLoadingOverlay({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden select-none pointer-events-auto"
-          style={{ width: "100vw", height: "100vh" }}
+          style={{ width: "100vw", height: "100dvh" }}
           aria-label="Loading..."
           role="dialog"
           aria-modal="true"
@@ -116,7 +116,7 @@ export function VideoLoadingOverlay({
             preload="auto"
             onEnded={handleFinish}
             onError={handleFinish}
-            className="w-full h-full object-cover pointer-events-none"
+            className="w-full h-full max-w-full max-h-full object-contain md:object-cover pointer-events-none"
           />
         </motion.div>
       )}
